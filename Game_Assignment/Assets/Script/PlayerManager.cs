@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : MoveObject
 {
-    protected Transform tr;
-    protected Vector3 vector;
-    public float moveSpeed;
+    //static public PlayerManager instance;
     // Start is called before the first frame update
     void Start()
     {
         tr = GetComponent<Transform>();
+        boxCollder = GetComponent<BoxCollider2D>();
+        //instance = this;
     }
 
     // Update is called once per frame
@@ -20,10 +20,13 @@ public class PlayerManager : MonoBehaviour
         {
             vector.Set(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), tr.position.z);
 
-            tr.Translate(Vector3.up * moveSpeed * vector.y * Time.deltaTime, Space.Self);
-            tr.Translate(Vector3.right * moveSpeed * vector.x * Time.deltaTime, Space.Self);
+            bool checkCollisionFlag = base.CheckCollision();
+            if (checkCollisionFlag)
+            {
+                tr.Translate(Vector3.up * moveSpeed * vector.y * Time.deltaTime, Space.Self);
+                tr.Translate(Vector3.right * moveSpeed * vector.x * Time.deltaTime, Space.Self);
 
-            
+            }
         }
     }
 }
